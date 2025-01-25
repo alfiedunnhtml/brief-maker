@@ -9,6 +9,8 @@ Use this guide to build a web app where users can generate random web design bri
 - Have a nice UI & loading animation when the brief is being generated.
 - Display all the briefs ever generated in a grid.
 - Assign 2 catagory tags to each brief, one for the industry and one for the estimated difficulty.
+- Allow users to click on a brief to view it.
+- Allow users to like a brief, add it to a favorites list, and view their favorites list.
 
 # Relevant documentation
 

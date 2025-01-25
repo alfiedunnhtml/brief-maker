@@ -5,11 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BriefGeneratorButton } from "./brief-generator-button";
 import { supabase, type Brief } from "@/lib/supabase";
 import { Spinner } from "@/components/ui/spinner";
+import { LikeButton } from "@/components/ui/like-button";
 
 export function BriefList() {
   const [briefs, setBriefs] = useState<Brief[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [likedBriefs, setLikedBriefs] = useState<Set<string>>(new Set());
 
   // Fetch briefs on component mount
   useEffect(() => {
@@ -72,6 +74,18 @@ export function BriefList() {
     }
   };
 
+  const handleLikeToggle = (briefId: string) => {
+    setLikedBriefs((prev) => {
+      const newLikedBriefs = new Set(prev);
+      if (newLikedBriefs.has(briefId)) {
+        newLikedBriefs.delete(briefId);
+      } else {
+        newLikedBriefs.add(briefId);
+      }
+      return newLikedBriefs;
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
@@ -115,7 +129,7 @@ export function BriefList() {
             <CardHeader>
               <div className="flex justify-between">
                 <CardTitle>Web Design Brief</CardTitle>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
                     {brief.industry}
                   </span>
@@ -130,6 +144,10 @@ export function BriefList() {
                   >
                     {brief.difficulty}
                   </span>
+                  <LikeButton 
+                    isLiked={likedBriefs.has(brief.id)}
+                    onToggle={() => handleLikeToggle(brief.id)}
+                  />
                 </div>
               </div>
               <CardDescription>

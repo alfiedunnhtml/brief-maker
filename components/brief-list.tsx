@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BriefGeneratorButton } from "./brief-generator-button";
 import { supabase, type Brief } from "@/lib/supabase";
+import { Spinner } from "@/components/ui/spinner";
 
 export function BriefList() {
   const [briefs, setBriefs] = useState<Brief[]>([]);
@@ -75,7 +76,8 @@ export function BriefList() {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
         <div className="text-center">
-          <div className="mb-4">Loading briefs...</div>
+          <Spinner className="mb-4 h-8 w-8" />
+          <div className="text-muted-foreground">Loading your briefs...</div>
         </div>
       </div>
     );
@@ -107,7 +109,7 @@ export function BriefList() {
         <BriefGeneratorButton onBriefGenerated={handleBriefGenerated} />
       </section>
 
-      <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {briefs.map((brief) => (
           <Card key={brief.id} className="transition-all hover:shadow-lg">
             <CardHeader>

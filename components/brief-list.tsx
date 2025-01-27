@@ -11,7 +11,6 @@ export function BriefList() {
   const [briefs, setBriefs] = useState<Brief[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [likedBriefs, setLikedBriefs] = useState<Set<string>>(new Set());
 
   // Fetch briefs on component mount
   useEffect(() => {
@@ -74,18 +73,6 @@ export function BriefList() {
     }
   };
 
-  const handleLikeToggle = (briefId: string) => {
-    setLikedBriefs((prev) => {
-      const newLikedBriefs = new Set(prev);
-      if (newLikedBriefs.has(briefId)) {
-        newLikedBriefs.delete(briefId);
-      } else {
-        newLikedBriefs.add(briefId);
-      }
-      return newLikedBriefs;
-    });
-  };
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
@@ -144,10 +131,7 @@ export function BriefList() {
                   >
                     {brief.difficulty}
                   </span>
-                  <LikeButton 
-                    isLiked={likedBriefs.has(brief.id)}
-                    onToggle={() => handleLikeToggle(brief.id)}
-                  />
+                  <LikeButton briefId={brief.id.toString()} />
                 </div>
               </div>
               <CardDescription>

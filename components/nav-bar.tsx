@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { LogOut, Heart } from "lucide-react";
+import { LogOut } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -16,13 +14,12 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function NavBar() {
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const router = useRouter();
 
   const handleSignOut = async () => {
     await signOut();
@@ -32,21 +29,10 @@ export function NavBar() {
   };
 
   return (
-    <header className="mb-12 flex items-center justify-between">
-      <Link href="/" className="flex items-center gap-4">
-
-        <h1 className="text-2xl font-bold">Brief Maker</h1>
-      </Link>
-
-      <nav>
+    <header className="flex justify-end border-b bg-background">
+      <div className=" flex h-16 max-w-7xl items-center justify-end px-8">
         {isSignedIn ? (
           <div className="flex items-center gap-4">
-            <Link href="/liked-briefs">
-              <Button variant="outline" className="gap-2">
-                <Heart className="h-4 w-4" />
-                Liked Briefs
-              </Button>
-            </Link>
             <Link href="/account">
               <Button variant="outline">My Account</Button>
             </Link>
@@ -93,7 +79,7 @@ export function NavBar() {
             </Link>
           </div>
         )}
-      </nav>
+      </div>
     </header>
   );
 } 

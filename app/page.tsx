@@ -1,13 +1,10 @@
 import { BriefList } from "@/components/brief-list";
-import { NavBar } from "@/components/nav-bar";
+import { MainLayout } from "@/components/main-layout";
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
-      <NavBar />
-      <main className="mx-auto max-w-7xl">
-        <BriefList />
-      </main>
-    </div>
+    <MainLayout>
+      <BriefList />
+    </MainLayout>
   );
 }

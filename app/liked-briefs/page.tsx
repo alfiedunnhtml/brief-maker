@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { NavBar } from "@/components/nav-bar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LikeButton } from "@/components/ui/like-button";
 import { Spinner } from "@/components/ui/spinner";
 import { supabase, type Brief } from "@/lib/supabase";
 import { BriefCard } from "@/components/brief-card";
+import { MainLayout } from "@/components/main-layout";
 
 interface LikedBrief {
   brief_id: number;
@@ -94,41 +96,35 @@ export default function LikedBriefsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen p-8">
-        <NavBar />
-        <div className="mx-auto max-w-7xl">
-          <div className="flex items-center justify-center min-h-[200px]">
-            <div className="text-center">
-              <Spinner className="mb-4 h-8 w-8" />
-              <div className="text-muted-foreground">Loading your liked briefs...</div>
-            </div>
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-[200px]">
+          <div className="text-center">
+            <Spinner className="mb-4 h-8 w-8" />
+            <div className="text-muted-foreground">Loading your liked briefs...</div>
           </div>
         </div>
-      </div>
+      </MainLayout>
     );
   }
 
   return (
-    <div className="min-h-screen p-8">
-      <NavBar />
-      <div className="mx-auto max-w-7xl">
-        <h1 className="mb-8 text-3xl font-bold">Your Liked Briefs</h1>
-        
-        {error ? (
-          <div className="text-center text-red-500">{error}</div>
-        ) : briefs.length === 0 ? (
-          <div className="text-center text-muted-foreground">
-            <p>You haven't liked any briefs yet.</p>
-            <p className="mt-2">Go to the home page to discover and like some briefs!</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {briefs.map((brief) => (
-              <BriefCard key={brief.id} brief={brief} initialLiked={true} />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+    <MainLayout>
+      <h1 className="mb-8 text-3xl font-bold">Your Liked Briefs</h1>
+      
+      {error ? (
+        <div className="text-center text-red-500">{error}</div>
+      ) : briefs.length === 0 ? (
+        <div className="text-center text-muted-foreground">
+          <p>You haven't liked any briefs yet.</p>
+          <p className="mt-2">Go to the home page to discover and like some briefs!</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {briefs.map((brief) => (
+            <BriefCard key={brief.id} brief={brief} initialLiked={true} />
+          ))}
+        </div>
+      )}
+    </MainLayout>
   );
 } 

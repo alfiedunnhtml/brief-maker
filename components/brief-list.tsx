@@ -6,6 +6,7 @@ import { BriefGeneratorButton } from "./brief-generator-button";
 import { supabase, type Brief } from "@/lib/supabase";
 import { Spinner } from "@/components/ui/spinner";
 import { LikeButton } from "@/components/ui/like-button";
+import { BriefCard } from "./brief-card";
 
 export function BriefList() {
   const [briefs, setBriefs] = useState<Brief[]>([]);
@@ -53,6 +54,7 @@ export function BriefList() {
             content: brief.content,
             industry: brief.industry,
             difficulty: brief.difficulty,
+            company_name: brief.company_name,
             created_at: brief.created_at,
           },
         ])
@@ -112,38 +114,7 @@ export function BriefList() {
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {briefs.map((brief) => (
-          <Card key={brief.id} className="transition-all hover:shadow-lg">
-            <CardHeader>
-              <div className="flex justify-between">
-                <CardTitle>Web Design Brief</CardTitle>
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
-                    {brief.industry}
-                  </span>
-                  <span 
-                    className={`rounded-full px-2 py-1 text-xs ${
-                      brief.difficulty === "Easy"
-                        ? "bg-green-100 text-green-800"
-                        : brief.difficulty === "Medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {brief.difficulty}
-                  </span>
-                  <LikeButton briefId={brief.id.toString()} />
-                </div>
-              </div>
-              <CardDescription>
-                Generated on {new Date(brief.created_at).toLocaleDateString()}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                {brief.content}
-              </p>
-            </CardContent>
-          </Card>
+          <BriefCard key={brief.id} brief={brief} />
         ))}
       </section>
     </div>

@@ -36,17 +36,19 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
         throw new Error(data.error);
       }
 
-      // Parse the response to extract industry and difficulty
+      // Parse the response to extract industry, difficulty, and company name
       const lines: string[] = data.content.split("\n");
       const industryLine = lines.find((line: string) => line.startsWith("INDUSTRY:"));
       const difficultyLine = lines.find((line: string) => line.startsWith("DIFFICULTY:"));
+      const companyLine = lines.find((line: string) => line.startsWith("COMPANY NAME:"));
 
       const industry = industryLine ? industryLine.split(":")[1].trim() : "Unknown";
       const difficulty = difficultyLine ? difficultyLine.split(":")[1].trim() : "Medium";
+      const company_name = companyLine ? companyLine.split(":")[1].trim() : "Untitled Company";
 
-      // Remove the industry and difficulty lines from the content
+      // Remove the metadata lines from the content
       const content = lines
-        .filter((line: string) => !line.startsWith("INDUSTRY:") && !line.startsWith("DIFFICULTY:"))
+        .filter((line: string) => !line.startsWith("INDUSTRY:") && !line.startsWith("DIFFICULTY:") && !line.startsWith("COMPANY NAME:"))
         .join("\n")
         .trim();
 
@@ -55,6 +57,7 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
         content,
         industry,
         difficulty,
+        company_name,
         created_at: new Date(),
       };
 

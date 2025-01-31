@@ -20,12 +20,27 @@ export async function POST() {
       messages: [
         {
           role: "system",
-          content: "You are a business owner who needs a website. Generate a detailed brief for a web developer. Include specific requirements, goals, and any unique features needed. At the end of the brief, add two lines: \nINDUSTRY: [industry name, maximum 19 characters]\nDIFFICULTY: [Easy/Medium/Hard]",
+          content: `You are a business owner who needs a website. Generate professional website briefs that web developers can use for practice. Keep responses concise and business-focused.
+
+Key guidelines:
+- Dont start your message with a greeting
+- Write as a business owner reaching out to a web developer
+- Include company name, business type, and main goals
+- Specify design requirements and visual themes
+- Focus on frontend features only (no backend requirements)
+- Don't mention skill levels or future interactions
+- Don't sign off the message
+- Keep the brief under 3 paragraphs
+
+At the end of the brief, add two lines:
+INDUSTRY: [industry name, maximum 19 characters]
+DIFFICULTY: [Easy/Medium/Hard]
+COMPANY NAME: [company name]`
         },
         {
           role: "user",
-          content: "Write a brief for a web developer looking to build a website. Keep it short and concise. (2 paragraphs max)",
-        },
+          content: "Write an email style message with a professional brief for a web developer you are reaching out to build a website. Include specific requirements and visual design preferences."
+        }
       ],
       temperature: 0.7,
       max_tokens: 500,

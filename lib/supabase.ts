@@ -13,6 +13,7 @@ export type Brief = {
   content: string;
   industry: string;
   difficulty: string;
+  company_name?: string;
   created_at: Date;
 };
 

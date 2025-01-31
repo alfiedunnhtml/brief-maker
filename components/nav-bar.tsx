@@ -34,14 +34,7 @@ export function NavBar() {
   return (
     <header className="mb-12 flex items-center justify-between">
       <Link href="/" className="flex items-center gap-4">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Brief Maker logo"
-          width={100}
-          height={20}
-          priority
-        />
+
         <h1 className="text-2xl font-bold">Brief Maker</h1>
       </Link>
 

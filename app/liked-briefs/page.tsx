@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { NavBar } from "@/components/nav-bar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LikeButton } from "@/components/ui/like-button";
 import { Spinner } from "@/components/ui/spinner";
 import { supabase, type Brief } from "@/lib/supabase";
+import { BriefCard } from "@/components/brief-card";
 
 interface LikedBrief {
   brief_id: number;
@@ -42,6 +41,7 @@ export default function LikedBriefsPage() {
               content,
               industry,
               difficulty,
+              company_name,
               created_at
             )
           `)
@@ -124,41 +124,7 @@ export default function LikedBriefsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {briefs.map((brief) => (
-              <Card key={brief.id} className="transition-all hover:shadow-lg">
-                <CardHeader>
-                  <div className="flex justify-between">
-                    <CardTitle>Web Design Brief</CardTitle>
-                    <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800">
-                        {brief.industry}
-                      </span>
-                      <span 
-                        className={`rounded-full px-2 py-1 text-xs ${
-                          brief.difficulty === "Easy"
-                            ? "bg-green-100 text-green-800"
-                            : brief.difficulty === "Medium"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {brief.difficulty}
-                      </span>
-                      <LikeButton 
-                        briefId={brief.id.toString()}
-                        initialLiked={true}
-                      />
-                    </div>
-                  </div>
-                  <CardDescription>
-                    Generated on {new Date(brief.created_at).toLocaleDateString()}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                    {brief.content}
-                  </p>
-                </CardContent>
-              </Card>
+              <BriefCard key={brief.id} brief={brief} initialLiked={true} />
             ))}
           </div>
         )}

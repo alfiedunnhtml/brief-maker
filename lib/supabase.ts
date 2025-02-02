@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -9,7 +9,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 // Define the type for our database briefs table
 export type Brief = {
-  id: string;
+  id: number;
   content: string;
   industry: string;
   difficulty: string;
@@ -20,8 +20,4 @@ export type Brief = {
 };
 
 // Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false // Since we're not using auth yet
-  }
-}); 
+export const supabase = createClientComponentClient(); 

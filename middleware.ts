@@ -7,7 +7,19 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient({ req, res });
 
   // Refresh session if expired
-  await supabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
+
+  // Protected routes
+  const protectedRoutes = ['/liked-briefs', '/account'];
+  const isProtectedRoute = protectedRoutes.some(route => 
+    req.nextUrl.pathname.startsWith(route)
+  );
+
+  if (isProtectedRoute && !session) {
+    const redirectUrl = new URL('/auth/sign-in', req.url);
+    redirectUrl.searchParams.set('redirectTo', req.nextUrl.pathname);
+    return NextResponse.redirect(redirectUrl);
+  }
 
   return res;
 }

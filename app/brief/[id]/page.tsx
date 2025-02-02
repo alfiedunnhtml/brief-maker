@@ -91,7 +91,7 @@ export default function BriefPage() {
                 <CardHeader className="flex-none border-b">
                   <div className="flex items-center justify-between mb-2">
                     <PageCardTitle>Project Brief</PageCardTitle>
-                    <LikeButton briefId={brief.id.toString()} />
+                    <LikeButton briefId={brief.id} />
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CalendarIcon className="h-4 w-4" />

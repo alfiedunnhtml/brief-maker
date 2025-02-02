@@ -18,7 +18,7 @@ export function BriefCard({ brief, initialLiked }: BriefCardProps) {
               <div className="flex justify-between items-center">
                 <CardTitle>{brief.company_name || "Web Design Brief"}</CardTitle>
                 <div className="relative z-10" onClick={(e) => e.preventDefault()}>
-                  <LikeButton briefId={brief.id.toString()} initialLiked={initialLiked} />
+                  <LikeButton briefId={brief.id} initialLiked={initialLiked} />
                 </div>
               </div>
               <div className="flex gap-2">

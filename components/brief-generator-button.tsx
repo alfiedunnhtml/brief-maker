@@ -67,12 +67,12 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
         .trim();
 
       const newBrief: Brief = {
-        id: Date.now().toString(),
+        id: Date.now(),
         content,
         industry,
         difficulty,
         company_name,
-        created_at: new Date(),
+        created_at: new Date().toISOString(),
         brand_colors,
         style,
       };

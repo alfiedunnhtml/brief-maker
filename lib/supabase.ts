@@ -1,4 +1,4 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -14,10 +14,13 @@ export type Brief = {
   industry: string;
   difficulty: string;
   company_name?: string;
-  created_at: Date;
+  created_at: string;
   brand_colors?: string[];
   style?: string;
 };
 
 // Create a single supabase client for interacting with your database
-export const supabase = createClientComponentClient(); 
+export const supabase = createBrowserClient(
+  supabaseUrl,
+  supabaseAnonKey
+); 

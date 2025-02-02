@@ -41,14 +41,28 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
       const industryLine = lines.find((line: string) => line.startsWith("INDUSTRY:"));
       const difficultyLine = lines.find((line: string) => line.startsWith("DIFFICULTY:"));
       const companyLine = lines.find((line: string) => line.startsWith("COMPANY NAME:"));
+      const colorsLine = lines.find((line: string) => line.startsWith("COLORS:"));
+      const styleLine = lines.find((line: string) => line.startsWith("WEBSITE STYLE:"));
 
       const industry = industryLine ? industryLine.split(":")[1].trim() : "Unknown";
       const difficulty = difficultyLine ? difficultyLine.split(":")[1].trim() : "Medium";
       const company_name = companyLine ? companyLine.split(":")[1].trim() : "Untitled Company";
+      const brand_colors = colorsLine 
+        ? colorsLine.split(":")[1]
+            .trim()
+            .match(/#[0-9A-Fa-f]{6}/g) || []
+        : [];
+      const style = styleLine ? styleLine.split(":")[1].trim() : "";
 
       // Remove the metadata lines from the content
       const content = lines
-        .filter((line: string) => !line.startsWith("INDUSTRY:") && !line.startsWith("DIFFICULTY:") && !line.startsWith("COMPANY NAME:"))
+        .filter((line: string) => 
+          !line.startsWith("INDUSTRY:") && 
+          !line.startsWith("DIFFICULTY:") && 
+          !line.startsWith("COMPANY NAME:") &&
+          !line.startsWith("COLORS:") &&
+          !line.startsWith("WEBSITE STYLE:")
+        )
         .join("\n")
         .trim();
 
@@ -59,6 +73,8 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
         difficulty,
         company_name,
         created_at: new Date(),
+        brand_colors,
+        style,
       };
 
       onBriefGenerated(newBrief);

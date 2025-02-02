@@ -35,7 +35,11 @@ Key guidelines:
 At the end of the brief, add two lines:
 INDUSTRY: [industry name, maximum 19 characters]
 DIFFICULTY: [Easy/Medium/Hard]
-COMPANY NAME: [company name]`
+COMPANY NAME: [company name]
+
+If you have mentioned them in the response, add:
+COLORS: [all colors mentioned in the response (PROVIDE HEX CODES)]
+WEBSITE STYLE: [all website styles mentioned in the response]`
         },
         {
           role: "user",

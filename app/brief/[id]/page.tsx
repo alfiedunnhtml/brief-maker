@@ -15,7 +15,7 @@ import { BriefList } from "@/components/brief-list";
 const PageCardTitle = ({ children, className, ...props }: React.ComponentPropsWithoutRef<typeof CardTitle>) => (
   <CardTitle 
     className={cn(
-      "text-xl font-semibold tracking-tight",
+      "text-2xl font-semibold tracking-tight",
       className
     )} 
     {...props}
@@ -23,6 +23,8 @@ const PageCardTitle = ({ children, className, ...props }: React.ComponentPropsWi
     {children}
   </CardTitle>
 );
+
+
 
 export default function BriefPage() {
   const params = useParams();
@@ -116,8 +118,8 @@ export default function BriefPage() {
                 <CardContent className="h-[calc(100%-8rem)] overflow-y-auto pt-6">
                   <div className="space-y-6">
                     <div>
-                      <h3 className="font-medium mb-2">Company Overview</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <h3 className="text-xl font-medium mb-2">Company Overview</h3>
+                      <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
                         {brief.content}
                       </p>
                     </div>
@@ -136,15 +138,15 @@ export default function BriefPage() {
                 </CardHeader>
                 <CardContent className="h-[calc(100%-5rem)] overflow-y-auto pt-6">
                   <div className="space-y-4">
-                    <h3 className="text-sm font-medium">Required Pages</h3>
+                    <h3 className="text-base font-medium">Required Pages</h3>
                     <ul className="text-sm text-muted-foreground space-y-2">
-                      <li>• Homepage with featured products</li>
-                      <li>• Product catalog/shop page</li>
-                      <li>• Individual product pages</li>
-                      <li>• About Us page</li>
-                      <li>• Contact page</li>
-                      <li>• Blog section</li>
-                      <li>• FAQ page</li>
+                      <li>• Filler Text </li>
+                      <li>• Filler Text </li>
+                      <li>• Filler Text </li>
+                      <li>• Filler Text </li>
+                      <li>• Filler Text </li>
+                      <li>• Filler Text </li>
+                      <li>• Filler Text </li>
                     </ul>
                   </div>
                 </CardContent>
@@ -159,27 +161,37 @@ export default function BriefPage() {
                 <CardContent className="h-[calc(100%-5rem)] overflow-y-auto pt-6">
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-sm font-medium mb-2">Company Details</h3>
                       <dl className="grid grid-cols-1 gap-4 text-sm">
                         <div>
-                          <dt className="font-medium">Company Name</dt>
+                          <dt className="text-base font-medium">Company Name</dt>
                           <dd className="text-muted-foreground mt-1">{brief.company_name}</dd>
                         </div>
                         <div>
-                          <dt className="font-medium">Industry</dt>
+                          <dt className="text-base font-medium">Industry</dt>
                           <dd className="text-muted-foreground mt-1">{brief.industry}</dd>
                         </div>
                         <div>
-                          <dt className="font-medium">Project Size</dt>
-                          <dd className="text-muted-foreground mt-1">{brief.difficulty}</dd>
+                          <dt className="text-base font-medium">Website Style</dt>
+                          <dd className="text-muted-foreground mt-1">
+                            {brief.style || "No style specified"}
+                          </dd>
                         </div>
                       </dl>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium mb-2">Brand Colors</h3>
+                      <h3 className="text-base font-medium mb-2">Brand Colors</h3>
                       <div className="flex gap-2">
-                        <div className="h-6 w-12 rounded bg-[#8B7355]" />
-                        <div className="h-6 w-12 rounded bg-[#D3C4BE]" />
+                        {brief.brand_colors && brief.brand_colors.length > 0 ? (
+                          brief.brand_colors.map((color, index) => (
+                            <div 
+                              key={index}
+                              className="border-2 border-gray-100	h-12 w-12 rounded"
+                              style={{ backgroundColor: color }}
+                            />
+                          ))
+                        ) : (
+                          <div className="text-sm text-muted-foreground">No brand colors specified</div>
+                        )}
                       </div>
                     </div>
                   </div>

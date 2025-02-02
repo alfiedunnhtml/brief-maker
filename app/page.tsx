@@ -44,6 +44,8 @@ export default function Home() {
             difficulty: brief.difficulty,
             company_name: brief.company_name,
             created_at: brief.created_at,
+            brand_colors: brief.brand_colors,
+            style: brief.style,
           },
         ])
         .select()

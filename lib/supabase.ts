@@ -15,6 +15,8 @@ export type Brief = {
   difficulty: string;
   company_name?: string;
   created_at: Date;
+  brand_colors?: string[];
+  style?: string;
 };
 
 // Create a single supabase client for interacting with your database

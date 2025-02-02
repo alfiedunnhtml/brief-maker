@@ -44,7 +44,9 @@ export default function LikedBriefsPage() {
               industry,
               difficulty,
               company_name,
-              created_at
+              created_at,
+              brand_colors,
+              style
             )
           `)
           .eq('user_id', userId)

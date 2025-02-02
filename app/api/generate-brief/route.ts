@@ -134,7 +134,7 @@ A PLAYFUL WEBSITE STYLE IS MORE SUITABLE FOR A TOY STORE OR A CAKE SHOP)
 
 ### FORMATTING
 
-At the end of the brief, add two lines:
+At the end of the brief, add these lines:
 INDUSTRY: [industry name, maximum 19 characters]
 DIFFICULTY: [Easy/Medium/Hard]
 COMPANY NAME: [company name]

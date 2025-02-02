@@ -1,23 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BriefGeneratorButton } from "./brief-generator-button";
 import { supabase, type Brief } from "@/lib/supabase";
 import { Spinner } from "@/components/ui/spinner";
-import { LikeButton } from "@/components/ui/like-button";
 import { BriefCard } from "./brief-card";
 
-export function BriefList() {
-  const [briefs, setBriefs] = useState<Brief[]>([]);
+interface BriefListProps {
+  briefs?: Brief[];
+  setBriefs?: React.Dispatch<React.SetStateAction<Brief[]>>;
+  showTitle?: boolean;
+}
+
+export function BriefList({ briefs: initialBriefs, setBriefs, showTitle = false }: BriefListProps) {
+  const [localBriefs, setLocalBriefs] = useState<Brief[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch briefs on component mount
   useEffect(() => {
     async function fetchBriefs() {
       try {
-        console.log('Fetching briefs...');
         const { data, error } = await supabase
           .from('briefs')
           .select('*')
@@ -29,51 +30,27 @@ export function BriefList() {
           return;
         }
 
-        console.log('Fetched briefs:', data);
-        setBriefs(data || []);
+        const briefsData = data || [];
+        setLocalBriefs(briefsData);
+        if (setBriefs) {
+          setBriefs(briefsData);
+        }
       } catch (error) {
-        console.error('Error fetching briefs:', error);
+        console.error('Error:', error);
         setError(error instanceof Error ? error.message : 'Failed to fetch briefs');
       } finally {
         setIsLoading(false);
       }
     }
 
-    fetchBriefs();
-  }, []);
-
-  const handleBriefGenerated = async (brief: Brief) => {
-    try {
-      console.log('Saving brief:', brief);
-      // Insert the new brief into Supabase
-      const { data, error } = await supabase
-        .from('briefs')
-        .insert([
-          {
-            id: brief.id,
-            content: brief.content,
-            industry: brief.industry,
-            difficulty: brief.difficulty,
-            company_name: brief.company_name,
-            created_at: brief.created_at,
-          },
-        ])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      console.log('Saved brief:', data);
-      // Update local state with the new brief
-      setBriefs((prev) => [data, ...prev]);
-    } catch (error) {
-      console.error('Error saving brief:', error);
-      setError(error instanceof Error ? error.message : 'Failed to save brief');
+    // If we have initial briefs, use them, otherwise fetch
+    if (initialBriefs && initialBriefs.length > 0) {
+      setLocalBriefs(initialBriefs);
+      setIsLoading(false);
+    } else {
+      fetchBriefs();
     }
-  };
+  }, [initialBriefs, setBriefs]);
 
   if (isLoading) {
     return (
@@ -104,19 +81,11 @@ export function BriefList() {
 
   return (
     <div>
-      <section className="mb-12 text-center">
-        <h2 className="mb-4 text-4xl font-bold">Generate Web Design Briefs</h2>
-        <p className="mb-8 text-muted-foreground">
-          Click the button below to generate a random web design brief from a simulated client
-        </p>
-        <BriefGeneratorButton onBriefGenerated={handleBriefGenerated} />
-      </section>
-
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {briefs.map((brief) => (
+        {localBriefs.map((brief) => (
           <BriefCard key={brief.id} brief={brief} />
         ))}
       </section>
     </div>
   );
-} 
+}

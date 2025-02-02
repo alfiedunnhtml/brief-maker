@@ -1,0 +1,12 @@
+[33mfcc2335[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Configured api prompt
+[33m4fa211d[m added colors & website style to brief page & database
+[33mea97373[m Changed to 4o-mini
+[33ma95ec3a[m Updated brief page design + more briefs list. Split brief gen & brief list into two components
+[33m07c7da5[m sidebar
+[33m30d0f19[m synchronized brief card components between pages
+[33m78e4c0b[m Added liked briefs page which links to account
+[33m60f46b7[m Clerk account implemented
+[33mbbf48b5[m Added like button
+[33m5d71efe[m Final code optimisation before clerk
+[33mb6ff1ef[m Update README with project description and setup instructions
+[33mf79994f[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m first commit

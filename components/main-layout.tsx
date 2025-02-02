@@ -1,4 +1,4 @@
-import { SideBar } from "./side-bar";
+import { Sidebar } from "./side-bar";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -6,13 +6,20 @@ interface MainLayoutProps {
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen flex bg-[#F9FAFB]">
-      <SideBar />
-      <div className="flex-1 lg:pl-[250px]">
-        <main className="h-screen p-6 lg:p-8 overflow-auto">
+    <div className="flex min-h-screen">
+      <aside className="fixed left-0 top-0 z-30 h-screen w-[250px] border-r bg-background">
+        <div className="flex h-full flex-col">
+          <div className="px-6 py-8">
+            <h1 className="text-2xl font-bold">Brief Maker</h1>
+          </div>
+          <Sidebar />
+        </div>
+      </aside>
+      <main className="flex-1 pl-[250px]">
+        <div className="container py-8">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 } 

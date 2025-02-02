@@ -16,7 +16,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         </div>
       </aside>
       <main className="flex-1 pl-[250px]">
-        <div className="container py-8">
+        <div className="mx-auto px-4 py-8">
           {children}
         </div>
       </main>

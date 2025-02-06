@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "app/api/generate-brief/route.ts": {
+      "maxDuration": 60
+    }
+  }
+} 

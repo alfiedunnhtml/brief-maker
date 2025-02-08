@@ -76,7 +76,8 @@ export default function Home() {
           <div>
             <BriefGeneratorSection onBriefGenerated={handleBriefGenerated} />
           </div>
-          <div className="rounded-lg border bg-card p-6">
+          {/* Generated brief section */}
+          <div className="h-72 rounded-lg border bg-card p-6">
             <h2 className="text-lg font-semibold mb-4">Generated Brief</h2>
             <p className="text-muted-foreground">
               Click "Generate Brief" to create a new web design brief

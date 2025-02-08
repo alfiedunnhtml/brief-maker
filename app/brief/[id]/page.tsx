@@ -97,22 +97,24 @@ export default function BriefPage() {
                     <CalendarIcon className="h-4 w-4" />
                     Generated on {new Date(brief.created_at).toLocaleDateString()}
                   </div>
-                  <div className="flex gap-2 mt-4">
-                    <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
-                      {brief.industry}
-                    </span>
-                    <span 
-                      className={cn(
-                        "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset",
-                        brief.difficulty === "Easy"
-                          ? "bg-green-50 text-green-700 ring-green-600/20"
-                          : brief.difficulty === "Medium"
-                          ? "bg-yellow-50 text-yellow-700 ring-yellow-600/20"
-                          : "bg-red-50 text-red-700 ring-red-600/20"
-                      )}
-                    >
-                      {brief.difficulty}
-                    </span>
+                  <div className="flex gap-2 ">
+                    {/* Tags */}
+                    <div className="flex gap-2 pt-2">
+                      <span className="rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
+                        {brief.industry}
+                      </span>
+                      <span 
+                        className={`rounded-md px-2 py-1 text-xs font-medium ${
+                          brief.difficulty === "Easy"
+                            ? "bg-green-100 text-green-800"
+                            : brief.difficulty === "Medium"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {brief.difficulty}
+                      </span>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="h-[calc(100%-8rem)] overflow-y-auto pt-6">
@@ -163,6 +165,22 @@ export default function BriefPage() {
                     <div>
                       <dl className="grid grid-cols-1 gap-4 text-sm">
                         <div>
+                          <h3 className="text-base font-medium mb-2">Brand Colors</h3>
+                          <div className="flex gap-2">
+                            {brief.brand_colors && brief.brand_colors.length > 0 ? (
+                              brief.brand_colors.map((color, index) => (
+                                <div 
+                                  key={index}
+                                  className="border-2 border-gray-100	h-12 w-12 rounded"
+                                  style={{ backgroundColor: color }}
+                                />
+                              ))
+                            ) : (
+                              <div className="text-sm text-muted-foreground">No brand colors specified</div>
+                            )}
+                          </div>
+                        </div>
+                        <div>
                           <dt className="text-base font-medium">Company Name</dt>
                           <dd className="text-muted-foreground mt-1">{brief.company_name}</dd>
                         </div>
@@ -178,22 +196,7 @@ export default function BriefPage() {
                         </div>
                       </dl>
                     </div>
-                    <div>
-                      <h3 className="text-base font-medium mb-2">Brand Colors</h3>
-                      <div className="flex gap-2">
-                        {brief.brand_colors && brief.brand_colors.length > 0 ? (
-                          brief.brand_colors.map((color, index) => (
-                            <div 
-                              key={index}
-                              className="border-2 border-gray-100	h-12 w-12 rounded"
-                              style={{ backgroundColor: color }}
-                            />
-                          ))
-                        ) : (
-                          <div className="text-sm text-muted-foreground">No brand colors specified</div>
-                        )}
-                      </div>
-                    </div>
+                    
                   </div>
                 </CardContent>
               </Card>

@@ -11,33 +11,37 @@ export default function LikedBriefsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchLikedBriefs() {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session?.user) {
-        // First get the liked brief IDs
-        const { data: likedBriefs } = await supabase
-          .from('liked_briefs')
-          .select('brief_id')
-          .eq('user_id', session.user.id);
-
-        if (likedBriefs && likedBriefs.length > 0) {
-          // Then fetch the actual briefs
-          const briefIds = likedBriefs.map(like => like.brief_id);
-          const { data: briefsData } = await supabase
-            .from('briefs')
-            .select('*')
-            .in('id', briefIds)
-            .order('created_at', { ascending: false });
-
-          setBriefs(briefsData || []);
-        }
-      }
-      setLoading(false);
-    }
-
     fetchLikedBriefs();
   }, []);
+
+  async function fetchLikedBriefs() {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session?.user) {
+      // First get the liked brief IDs
+      const { data: likedBriefs } = await supabase
+        .from('liked_briefs')
+        .select('brief_id')
+        .eq('user_id', session.user.id);
+
+      if (likedBriefs && likedBriefs.length > 0) {
+        // Then fetch the actual briefs
+        const briefIds = likedBriefs.map(like => like.brief_id);
+        const { data: briefsData } = await supabase
+          .from('briefs')
+          .select('*')
+          .in('id', briefIds)
+          .order('created_at', { ascending: false });
+
+        setBriefs(briefsData || []);
+      }
+    }
+    setLoading(false);
+  }
+
+  const handleBriefDeleted = (id: number) => {
+    setBriefs((prev) => prev.filter(brief => brief.id !== id));
+  };
 
   return (
     <MainLayout>
@@ -70,6 +74,7 @@ export default function LikedBriefsPage() {
                 key={brief.id} 
                 brief={brief} 
                 initialLiked={true}
+                onDelete={handleBriefDeleted}
               />
             ))}
           </div>

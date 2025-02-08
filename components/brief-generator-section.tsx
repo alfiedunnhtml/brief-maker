@@ -9,12 +9,21 @@ interface BriefGeneratorSectionProps {
 
 export function BriefGeneratorSection({ onBriefGenerated }: BriefGeneratorSectionProps) {
   return (
-    <section className="mb-12 text-center">
-      <h2 className="mb-4 text-4xl font-bold">Generate Web Design Briefs</h2>
-      <p className="mb-8 text-muted-foreground">
-        Click the button below to generate a random web design brief from a simulated client
-      </p>
-      <BriefGeneratorButton onBriefGenerated={onBriefGenerated} />
-    </section>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold">Web Design Brief Generator</h2>
+        <p className="text-muted-foreground">Generate creative web design briefs instantly</p>
+      </div>
+
+      <div className="space-y-4">
+        <BriefGeneratorButton onBriefGenerated={onBriefGenerated} />
+
+        <div className="pt-4">
+          <p className="text-sm text-muted-foreground">
+            Generate longer, more detailed briefs by upgrading to Pro
+          </p>
+        </div>
+      </div>
+    </div>
   );
 } 

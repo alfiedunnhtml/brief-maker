@@ -149,7 +149,7 @@ WEBSITE STYLE: [all website styles mentioned in the response]`
         }
       ],
       temperature: 1,
-      max_tokens: 500,
+      max_tokens: 300,
     });
 
     const response = completion.choices[0].message.content;

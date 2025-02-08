@@ -87,10 +87,10 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-start gap-4">
       <Button
         size="lg"
-        className="font-semibold"
+        className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
         onClick={generateBrief}
         disabled={isLoading}
       >
@@ -100,7 +100,7 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
             Generating...
           </>
         ) : (
-          "Generate New Brief"
+          "Generate Brief"
         )}
       </Button>
       {error && (

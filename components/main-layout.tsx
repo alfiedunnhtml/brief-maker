@@ -6,7 +6,7 @@ interface MainLayoutProps {
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#FCFCFC]">
       <Navbar />
       <main className="pt-16">
         <div className="mx-auto px-4 py-8">

@@ -13,6 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { UserCircle, Mail, Calendar, LogOut } from "lucide-react";
 
 export default function AccountPage() {
   const [user, setUser] = useState<any>(null);
@@ -51,7 +53,7 @@ export default function AccountPage() {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
+      <div className="max-w-[1250px] mx-auto px-4 py-8 space-y-8">
         <div>
           <h1 className="text-3xl font-bold">Account Settings</h1>
           <p className="text-muted-foreground">
@@ -59,58 +61,99 @@ export default function AccountPage() {
           </p>
         </div>
 
-        <div className="space-y-4">
-          <div className="grid gap-2">
-            <h2 className="text-lg font-semibold">Email</h2>
-            <p className="text-muted-foreground">{user?.email}</p>
-          </div>
+        <div className="grid gap-6">
+          {/* Profile Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <UserCircle className="h-5 w-5" />
+                Profile Information
+              </CardTitle>
+              <CardDescription>
+                Your personal account details
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-start gap-4 border-b pb-4">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <UserCircle className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium">Account ID</h3>
+                  <p className="text-sm text-muted-foreground break-all">{user?.id}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 border-b pb-4">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Mail className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium">Email Address</h3>
+                  <p className="text-sm text-muted-foreground">{user?.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Calendar className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium">Last Sign In</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(user?.last_sign_in_at).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="grid gap-2">
-            <h2 className="text-lg font-semibold">Account ID</h2>
-            <p className="text-muted-foreground">{user?.id}</p>
-          </div>
-
-          <div className="grid gap-2">
-            <h2 className="text-lg font-semibold">Last Sign In</h2>
-            <p className="text-muted-foreground">
-              {new Date(user?.last_sign_in_at).toLocaleString()}
-            </p>
-          </div>
+          {/* Account Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <LogOut className="h-5 w-5" />
+                Account Actions
+              </CardTitle>
+              <CardDescription>
+                Manage your account access
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                variant="destructive"
+                className="gap-2"
+                onClick={() => setShowSignOutDialog(true)}
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="pt-6">
-          <Button 
-            variant="destructive"
-            onClick={() => setShowSignOutDialog(true)}
-          >
-            Sign Out
-          </Button>
-
-          <Dialog open={showSignOutDialog} onOpenChange={setShowSignOutDialog}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you sure you want to sign out?</DialogTitle>
-                <DialogDescription>
-                  You will need to sign in again to access your liked briefs and account settings.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter className="gap-2 sm:gap-0">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowSignOutDialog(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
+        <Dialog open={showSignOutDialog} onOpenChange={setShowSignOutDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you sure you want to sign out?</DialogTitle>
+              <DialogDescription>
+                You will need to sign in again to access your liked briefs and account settings.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button
+                variant="outline"
+                onClick={() => setShowSignOutDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </MainLayout>
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Heart, LogOut, UserIcon, Settings } from "lucide-react";
+import { Home, Heart, LogOut, UserIcon, Settings, Library } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { supabase } from "@/lib/supabase";
@@ -49,11 +49,11 @@ export function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background">
+    <header className="fixed top-0 left-0 shadow-sm right-0 z-50 bg-background">
       <div className="w-full px-8">
         <div className="flex h-16 items-center">
           {/* Logo */}
-          <div className="flex-none">
+          <div className="w-[240px]">
             <Link href="/" className="text-xl font-bold">
               Brief Maker
             </Link>
@@ -73,6 +73,18 @@ export function Navbar() {
                 Home
               </Button>
             </Link>
+            <Link href="/briefs">
+              <Button
+                variant="ghost"
+                className={cn(
+                  "gap-2",
+                  pathname === "/briefs" && "bg-accent"
+                )}
+              >
+                <Library className="h-4 w-4" />
+                Briefs
+              </Button>
+            </Link>
             <Link href="/liked-briefs">
               <Button
                 variant="ghost"
@@ -85,27 +97,27 @@ export function Navbar() {
                 Liked Briefs
               </Button>
             </Link>
-            {isAdmin && (
-              <Link href="/admin">
-                <Button
-                  variant="ghost"
-                  className={cn(
-                    "gap-2",
-                    pathname === "/admin" && "bg-accent"
-                  )}
-                >
-                  <Settings className="h-4 w-4" />
-                  Admin
-                </Button>
-              </Link>
-            )}
           </nav>
 
           {/* Auth Section */}
           {!loading && (
-            <div className="flex-none flex items-center gap-2">
+            <div className="w-[240px] flex items-center justify-end gap-2">
               {user ? (
                 <>
+                  {isAdmin && (
+                    <Link href="/admin">
+                      <Button
+                        variant="ghost"
+                        className={cn(
+                          "gap-2",
+                          pathname === "/admin" && "bg-accent"
+                        )}
+                      >
+                        <Settings className="h-4 w-4" />
+                        Admin
+                      </Button>
+                    </Link>
+                  )}
                   <Link href="/account">
                     <Button 
                       variant="ghost" 

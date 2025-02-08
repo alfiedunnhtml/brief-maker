@@ -11,21 +11,37 @@ Use this guide to build a web app where users can generate random web design bri
 - Assign 2 catagory tags to each brief, one for the industry and one for the estimated difficulty. ✅
 - Allow users to click on a brief to view it. ✅
 - Allow users to like a brief, add it to a favorites list, and view their favorites list. ✅
-- Allow users to select whether they want to generate a brief for a whole website or just a specific page.
-- If the user selects a whole website, generate a brief for a whole website. If the user selects a landing page, generate a brief for the specific page.
-- If the user selects a whole website, let them select how many pages they want the website to have.
+- Allow users to leave comments on a brief.
+- Allow users to select difficulty of brief
+- Allow users to scroll through all the briefs ever generated.
+
+## Base Features
+
+- Allow users to "generate brief", this picks a random brief from the basic brief database.
+- Brief contains:
+  - Industry
+  - Brand colors
+  - Website style
 
 ## pro
 
-- More detailed briefs
-- Larger brief database
--
+- Allow users to generate AI generated briefs, these briefs will be more detailed and will include more information about the website.
+- Brief contains:
+  - Detailed proposal description
+  - Industry
+  - Brand colors
+  - Website style
+  - Deliverables
+  - Difficulty
+- Access to all briefs ever generated.
+- Select difficulty of brief
 
 # Relevant documentation
 
 ## How to use OpenAI API
 
 import OpenAI from "openai";
+
 const openai = new OpenAI();
 
 const completion = await openai.chat.completions.create({

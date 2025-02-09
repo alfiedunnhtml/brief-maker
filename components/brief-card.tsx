@@ -2,10 +2,10 @@ import { Card } from "@/components/ui/card";
 import { LikeButton } from "@/components/ui/like-button";
 import { type Brief } from "@/lib/supabase";
 import Link from "next/link";
-import { Pencil, Trash2 } from "lucide-react";
+import { MessageSquare, Pencil, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useAdmin } from "@/lib/admin-context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import {
@@ -31,7 +31,22 @@ function truncateText(text: string, maxLength: number = 200) {
 export function BriefCard({ brief, initialLiked, onDelete }: BriefCardProps) {
   const { isAdmin } = useAdmin();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    // Fetch comment count for this brief
+    async function fetchCommentCount() {
+      const { count } = await supabase
+        .from('comments')
+        .select('*', { count: 'exact', head: true })
+        .eq('brief_id', brief.id);
+      
+      setCommentCount(count || 0);
+    }
+
+    fetchCommentCount();
+  }, [brief.id]);
 
   const handleDelete = async () => {
     try {
@@ -120,9 +135,10 @@ export function BriefCard({ brief, initialLiked, onDelete }: BriefCardProps) {
           {/* Footer Section */}
           <div className="mt-4 pt-4 border-t">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
-                {new Date(brief.created_at).toLocaleDateString()}
-              </span>
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <MessageSquare className="h-4 w-4" />
+                <span>{commentCount} comments</span>
+              </div>
               <div onClick={(e) => e.preventDefault()}>
                 <LikeButton briefId={brief.id} initialLiked={initialLiked} />
               </div>

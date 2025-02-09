@@ -22,19 +22,25 @@ Use this guide to build a web app where users can generate random web design bri
   - Industry
   - Brand colors
   - Website style
+- Mark briefs as completed
 
 ## pro
 
 - Allow users to generate AI generated briefs, these briefs will be more detailed and will include more information about the website.
 - Brief contains:
+
   - Detailed proposal description
   - Industry
   - Brand colors
   - Website style
   - Deliverables
   - Difficulty
+
 - Access to all briefs ever generated.
 - Select difficulty of brief
+- Mark briefs as in progress
+- Mark briefs as completed
+- Tick off deliverables as they are completed
 
 # Relevant documentation
 

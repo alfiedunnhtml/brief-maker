@@ -110,7 +110,11 @@ export default function Home() {
                               ? "bg-green-100 text-green-800"
                               : latestBrief.difficulty === "Medium"
                               ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
+                              : latestBrief.difficulty === "Difficult"
+                              ? "bg-orange-100 text-orange-800"
+                              : latestBrief.difficulty === "Hard"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-gray-100 text-gray-800"
                           }`}
                         >
                           {latestBrief.difficulty}
@@ -163,11 +167,9 @@ export default function Home() {
               </div>
             </Link>
           ) : (
-            <div className="h-72 rounded-lg border bg-card p-6">
-              <h2 className="text-lg font-semibold mb-4">Generated Brief</h2>
-              <p className="text-muted-foreground">
-                Click "Generate Brief" to create a new web design brief
-              </p>
+            // placeholder for the brief
+            <div className="h-72 rounded-lg border bg-card p-6 flex items-center justify-center">
+              <h2 className="text-muted-foreground text-2xl font-semibold mb-4">Generate a brief to get started...</h2>
             </div>
           )}
         </div>

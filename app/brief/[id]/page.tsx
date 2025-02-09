@@ -217,7 +217,7 @@ export default function BriefPage() {
                         brief.deliverables.map((deliverable, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <span className="text-yellow-500">•</span>
-                            <span>{deliverable}</span>
+                            <span>{deliverable.charAt(0).toUpperCase() + deliverable.slice(1)}</span>
                           </li>
                         ))
                       ) : (

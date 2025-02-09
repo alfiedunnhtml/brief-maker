@@ -60,7 +60,7 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
       }
 
       const industry = industryLine ? industryLine.split(":")[1].trim() : "Unknown";
-      const difficulty = difficultyLine ? difficultyLine.split(":")[1].trim() : "Medium";
+      const difficulty = difficultyLine ? difficultyLine.split(":")[1].trim() : "N/A";
       const company_name = companyLine ? companyLine.split(":")[1].trim() : "Untitled Company";
       const brand_colors = colorsLine 
         ? colorsLine.split(":")[1]
@@ -72,7 +72,7 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
       // Remove the metadata lines and deliverables section from the content
       const content = lines
         .filter((line: string) => 
-          !line.startsWith("INDUSTRY:") && 
+          !line.startsWith("INDUSTRY:") &&
           !line.startsWith("DIFFICULTY:") && 
           !line.startsWith("COMPANY NAME:") &&
           !line.startsWith("COLORS:") &&

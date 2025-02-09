@@ -39,6 +39,7 @@ interface BriefData {
 const difficultyOptions = [
   { value: 'Easy', label: 'Easy' },
   { value: 'Medium', label: 'Medium' },
+  { value: 'Difficult', label: 'Difficult' },
   { value: 'Hard', label: 'Hard' },
 ];
 
@@ -118,10 +119,11 @@ export default function EditBriefPage({ params }: { params: { id: string } }) {
       }
 
       console.log('Brief updated successfully:', data);
-      router.push('/admin');
+      router.back();
     } catch (error) {
       console.error('Error updating brief:', error);
       alert('Failed to save brief. Please check console for details.');
+
     } finally {
       setSaving(false);
     }

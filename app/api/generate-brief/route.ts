@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
+
+
 const industries = [
   "1. Food & Beverage",
   "2. Construction",
@@ -67,6 +69,14 @@ export async function POST() {
   }
 
   try {
+    const randomNumber = Math.floor(Math.random() * 5) + 1;
+    const randomNumber2 = Math.floor(Math.random() * 49) + 1;
+    const difficulty = randomNumber === 1 ? "Easy" : randomNumber === 2 ? "Medium" : randomNumber === 3 ? "Medium" : randomNumber === 4 ? "Difficult" : "Hard";
+    
+    // Get the selected industry (subtract 1 since array is 0-indexed)
+    const selectedIndustry = industries[randomNumber2 - 1].split(". ")[1];
+    console.log(`difficulty: ${randomNumber}, ${difficulty} ---  Industry: ${randomNumber2}, ${selectedIndustry}`);
+
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -74,38 +84,57 @@ export async function POST() {
           role: "system",
           content: `You are a business owner who needs a website. Generate professional website briefs that web developers can use for practice. Keep responses concise and business-focused.
 
-STEP 1: Pick a random number between 1 and 49. This is CRITICAL - you must use this exact number to select the industry.
 
-STEP 2: Look at this numbered list and find the industry that matches your number:
-${industries.join("\n")}
-
-DO NOT change your number after seeing the list. You MUST use the industry that corresponds to your initial random number.
-
-----
 
 Key brief guidelines:
+**You must follow these guidelines strictly**
 
 - Dont start your message with a greeting
 - Write as a business owner reaching out to a web developer
-- Include company name, business type, and main goals
+- Include company name & business type
 - Specify design requirements and visual themes
-- Focus on frontend features only (no backend requirements)
-- Don't mention skill levels or future interactions
+- Avoid repeating yourself, dont ask for high quality images, if you have already referenced them in the brief. Your last paragraph can be a summary, so it is ok to repeat yourself, but your first 2 paragraphs should be unique.
+- You must talk about the home page at some point in your response
+- Must include atleast 5 main deliverables
+- Avoid being too vague, be specific about what you want, the developer needs to know what you want.
+- Don't mention skill level
+- Don't mention the difficulty of the project
+- Don't mention future interactions
+- Don't use the word "deliverable" or "deliverables" in your response, until the end of the response, when you are listing the deliverables.
 - Don't sign off the message
-- Only include hex code at the end of the response, when referencing colors in the response just use the color name.
-- You MUST aim for 3 paragraphs of content, around 1000 characters is a good length but this is not a strict requirement.
-
-
-
-notes for alife
-fix awful name gen
-try to make it stop picking modern every time
-make all brief cards same length
-work faster!!!!!
+- You MUST include hex codes for colors you have referenced, at the end of the response. When referencing colors in the brief, just use the color name, never use hex codes.
+- You MUST aim for 3 paragraphs of content, around 1200 characters is a good length but this is not a strict requirement.
+- The brief section of the response should end naturally, dont end it with a list of requirements or by explaining the requirements.
 
 
 
 Important information:
+
+### INDUSTRY
+
+- The industry you have selected is ${selectedIndustry}
+- The business you create must be relevant to the industry you have selected.
+- The brief, deliverables, website style, colors and business name must be relevant to the industry you have selected.
+
+### DIFFICULTY
+
+- There are 4 levels of difficulty: Easy, Medium, Difficult, Hard
+- The chosen difficulty of this project is ${difficulty}
+
+The ${difficulty} relates to how skilled the developer needs to be to complete the project.
+
+
+### DELIVERABLES
+
+- Must include atleast 5 deliverables
+- Do not include more than 9 deliverables
+- Deliverables must be specific, and not vague.
+- Deliverables must be relevant to the industry you selected.
+- Deliverables must be achievable for the difficulty level you have selected.
+- Deliverables should be things the developer can build or accomplish, they should be able to be ticked off, they should not be vague like:
+  - "A website that is easy to use"
+  - "Homepage design"
+
 
 ### WEBSITE STYLE
 
@@ -120,9 +149,7 @@ Important information:
   - Glassmorphism
   - Elegant
   - Playful
-(YOU SHOULD NOT CHOSE ONLY FROM THIS LIST, YOU CAN CHOSE FROM ANY STYLE BUT THE STYLE MUST FIT WITH THE BUSINESS
-FOR EXAMPLE: A LAW FIRM SHOULD NOT HAVE A PLAYFUL WEBSITE STYLE, THEY SHOULD HAVE A MORE PROFESSIONAL & CORPORATE STYLE,
-A PLAYFUL WEBSITE STYLE IS MORE SUITABLE FOR A TOY STORE OR A CAKE SHOP)
+(YOU SHOULD NOT CHOSE ONLY FROM THIS LIST, YOU CAN CHOSE FROM ANY STYLE BUT THE STYLE MUST FIT WITH THE BUSINESS)
 
 
 ### BUSINESS NAME
@@ -132,15 +159,20 @@ A PLAYFUL WEBSITE STYLE IS MORE SUITABLE FOR A TOY STORE OR A CAKE SHOP)
 - Business names can often be puns, use play on words, use wordplay, use new invented words & are most of the time short (less than 3 words)
 - Try to come up with unique brand colors, you often use colors like "#4CAF50", "#8B4513" it is not forbidden to use them but try to come up with unique colors, however the colors should work well together and must fit with the business.
 
+
+
 ### FORMATTING
 
 At the end of the brief, add these lines:
 INDUSTRY: [industry name, maximum 19 characters]
-DIFFICULTY: [Easy/Medium/Hard]
+DIFFICULTY: [The difficulty you picked]
 COMPANY NAME: [company name]
-DELIVERABLES: [all deliverables mentioned in the response, specific things you have asked the developer to build / features you have asked for]
+DELIVERABLES: [all deliverables mentioned in the response, specific things you have asked the developer to build / features you have asked for (MUST BE SEPERATED BY COMMAS)]
 COLORS: [all colors mentioned in the response (PROVIDE HEX CODES)]
-WEBSITE STYLE: [all website styles mentioned in the response]`
+WEBSITE STYLE: [all website styles mentioned in the response]
+
+`
+
         },
         {
           role: "user",
@@ -148,7 +180,7 @@ WEBSITE STYLE: [all website styles mentioned in the response]`
         }
       ],
       temperature: 1,
-      max_tokens: 380,
+      max_tokens: 500,
     });
 
     const response = completion.choices[0].message.content;

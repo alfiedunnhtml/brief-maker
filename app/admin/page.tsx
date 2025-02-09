@@ -130,11 +130,7 @@ export default function AdminPage() {
 
         <div className="grid gap-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Admin Users</CardTitle>
-              <CardDescription>Users with administrative access</CardDescription>
-            </CardHeader>
-            <CardContent>
+
               <ul className="space-y-2">
                 {users.map((user) => (
                   <li key={user.user_id} className="flex items-center justify-between">
@@ -142,7 +138,7 @@ export default function AdminPage() {
                   </li>
                 ))}
               </ul>
-            </CardContent>
+
           </Card>
 
           <Card>
@@ -168,7 +164,7 @@ export default function AdminPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="text-blue-500 hover:text-blue-600 hover:bg-blue-100"
+                          className="text-muted-foreground hover:text-black hover:bg-gray-100"
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>

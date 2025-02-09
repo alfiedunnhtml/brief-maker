@@ -259,7 +259,7 @@ export function BriefList({ briefs: initialBriefs, setBriefs, blurOverlay, limit
       {/* Show sort button when displaying all briefs (no limit) */}
       {!limit && !isLoading && localBriefs.length > 0 && (
         <div className="flex justify-end items-center gap-2 mb-6">
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="gap-2">
                 <Filter className="h-4 w-4" />

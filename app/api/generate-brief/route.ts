@@ -120,7 +120,7 @@ Important information:
   - Glassmorphism
   - Elegant
   - Playful
-(YOU MUST PICK A WEBSITE STYLE, YOU SHOULD NOT CHOSE ONLY FROM THIS LIST, YOU CAN CHOSE FROM ANY STYLE BUT THE STYLE MUST FIT WITH THE BUSINESS
+(YOU SHOULD NOT CHOSE ONLY FROM THIS LIST, YOU CAN CHOSE FROM ANY STYLE BUT THE STYLE MUST FIT WITH THE BUSINESS
 FOR EXAMPLE: A LAW FIRM SHOULD NOT HAVE A PLAYFUL WEBSITE STYLE, THEY SHOULD HAVE A MORE PROFESSIONAL & CORPORATE STYLE,
 A PLAYFUL WEBSITE STYLE IS MORE SUITABLE FOR A TOY STORE OR A CAKE SHOP)
 
@@ -148,7 +148,7 @@ WEBSITE STYLE: [all website styles mentioned in the response]`
         }
       ],
       temperature: 1,
-      max_tokens: 300,
+      max_tokens: 380,
     });
 
     const response = completion.choices[0].message.content;

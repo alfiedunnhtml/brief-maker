@@ -55,6 +55,36 @@ const industries = [
   "49. Photography",
 ];
 
+const briefDifficulty = {
+  "Easy": {
+    "total deliverables": 5,
+    "easy deliverables": 5,
+    "medium deliverables": 0,
+    "hard deliverables": 0,
+    "brief length estimate": "1000 characters"
+
+  },
+  "Medium": {
+    "total deliverables": 7,
+    "easy deliverables": 3,
+    "medium deliverables": 4,
+    "hard deliverables": 0,
+    "brief length estimate": "1200 characters"
+  },
+
+
+  "Hard": {
+    "total deliverables": 9,
+    "easy deliverables": 2,
+    "medium deliverables": 3,
+    "hard deliverables": 4,
+    "brief length estimate": "1400 characters"
+
+
+  }
+}
+
+
 // Initialize OpenAI client (server-side only)
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -69,13 +99,18 @@ export async function POST() {
   }
 
   try {
-    const randomNumber = Math.floor(Math.random() * 5) + 1;
+    const randomNumber = Math.floor(Math.random() * 13) + 1;
     const randomNumber2 = Math.floor(Math.random() * 49) + 1;
-    const difficulty = randomNumber === 1 ? "Easy" : randomNumber === 2 ? "Medium" : randomNumber === 3 ? "Medium" : randomNumber === 4 ? "Difficult" : "Hard";
+    // gives slightly more weight to the medium difficulty
+    const difficulty = randomNumber <= 4 ? "Easy" : randomNumber <= 9 ? "Medium" : "Hard";
     
     // Get the selected industry (subtract 1 since array is 0-indexed)
     const selectedIndustry = industries[randomNumber2 - 1].split(". ")[1];
     console.log(`difficulty: ${randomNumber}, ${difficulty} ---  Industry: ${randomNumber2}, ${selectedIndustry}`);
+
+    // Get the corresponding difficulty settings
+    const difficultySettings = briefDifficulty[difficulty];
+    console.log('Difficulty Settings:', difficultySettings);
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -87,7 +122,7 @@ export async function POST() {
 
 
 Key brief guidelines:
-**You must follow these guidelines strictly**
+**You MUST follow these guidelines strictly**
 
 - Dont start your message with a greeting
 - Write as a business owner reaching out to a web developer
@@ -102,7 +137,7 @@ Key brief guidelines:
 - Don't mention future interactions
 - Don't use the word "deliverable" or "deliverables" in your response, until the end of the response, when you are listing the deliverables.
 - Don't sign off the message
-- You MUST include hex codes for colors you have referenced, at the end of the response. When referencing colors in the brief, just use the color name, never use hex codes.
+- You MUST include hex codes for colors you have referenced at the end of the response. When referencing colors in the brief, just use the color name, never use hex codes.
 - You MUST aim for 3 paragraphs of content, around 1200 characters is a good length but this is not a strict requirement.
 - The brief section of the response should end naturally, dont end it with a list of requirements or by explaining the requirements.
 
@@ -118,23 +153,26 @@ Important information:
 
 ### DIFFICULTY
 
-- There are 4 levels of difficulty: Easy, Medium, Difficult, Hard
+- There are 3 levels of difficulty: Easy, Medium & Hard
 - The chosen difficulty of this project is ${difficulty}
 
-The ${difficulty} relates to how skilled the developer needs to be to complete the project.
+The ${difficulty} relates to how skilled the developer would need to be to complete & implement all the features you have asked for in the brief.
 
+The difficulty of your brief & what you are asking for *MUST* match the difficulty selected (${difficulty})
 
 ### DELIVERABLES
 
-- Must include atleast 5 deliverables
-- Do not include more than 9 deliverables
-- Deliverables must be specific, and not vague.
-- Deliverables must be relevant to the industry you selected.
-- Deliverables must be achievable for the difficulty level you have selected.
 - Deliverables should be things the developer can build or accomplish, they should be able to be ticked off, they should not be vague like:
   - "A website that is easy to use"
   - "Homepage design"
+  - "Homepage layout"
 
+- You must include exactly ${difficultySettings["total deliverables"]} deliverables in total
+- ${difficultySettings["easy deliverables"]} should be easy deliverables (basic features like contact forms, responsive design)
+- ${difficultySettings["medium deliverables"]} should be medium deliverables (intermediate features like search functionality, filtering)
+
+- ${difficultySettings["hard deliverables"]} should be hard deliverables (advanced features like user authentication, real-time updates)
+- Your brief should be around ${difficultySettings["brief length estimate"]} in length
 
 ### WEBSITE STYLE
 
@@ -167,7 +205,7 @@ At the end of the brief, add these lines:
 INDUSTRY: [industry name, maximum 19 characters]
 DIFFICULTY: [The difficulty you picked]
 COMPANY NAME: [company name]
-DELIVERABLES: [all deliverables mentioned in the response, specific things you have asked the developer to build / features you have asked for (MUST BE SEPERATED BY COMMAS)]
+DELIVERABLES: [The specific features you have asked for in the brief, list them from most unique  (MUST BE SEPERATED BY COMMAS)]
 COLORS: [all colors mentioned in the response (PROVIDE HEX CODES)]
 WEBSITE STYLE: [all website styles mentioned in the response]
 

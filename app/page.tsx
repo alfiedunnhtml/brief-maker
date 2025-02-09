@@ -36,7 +36,7 @@ export default function Home() {
 
   const handleBriefGenerated = async (brief: Brief) => {
     try {
-      console.log('Saving brief:', brief);
+      // console.log('Saving brief:', brief);
       const { data, error } = await supabase
         .from('briefs')
         .insert([
@@ -60,7 +60,7 @@ export default function Home() {
         throw error;
       }
 
-      console.log('Saved brief:', data);
+      // console.log('Saved brief:', data);
       setBriefs((prev) => [data, ...prev]);
       setLatestBrief(data);
     } catch (error) {
@@ -110,8 +110,6 @@ export default function Home() {
                               ? "bg-green-100 text-green-800"
                               : latestBrief.difficulty === "Medium"
                               ? "bg-yellow-100 text-yellow-800"
-                              : latestBrief.difficulty === "Difficult"
-                              ? "bg-orange-100 text-orange-800"
                               : latestBrief.difficulty === "Hard"
                               ? "bg-red-100 text-red-800"
                               : "bg-gray-100 text-gray-800"

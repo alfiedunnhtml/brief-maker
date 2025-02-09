@@ -161,7 +161,7 @@ export default function BriefPage() {
               <Card className="flex-1 overflow-hidden min-h-0">
                 <CardHeader className="flex-none border-b">
                   <div className="flex items-center justify-between mb-2">
-                    <PageCardTitle>Project Brief</PageCardTitle>
+                    <PageCardTitle>{brief.company_name}</PageCardTitle>
                     <LikeButton briefId={brief.id} />
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -202,15 +202,15 @@ export default function BriefPage() {
             </div>
 
             {/* Middle Column */}
-            <div className="flex flex-col gap-6 min-w-0">
+            <div className="grid grid-rows-[1fr,1fr] gap-6 min-w-0">
               {/* Deliverables */}
-              <Card className="flex-1 overflow-hidden min-h-0">
+              <Card className="h-full overflow-hidden">
                 <CardHeader className="flex-none border-b">
                   <PageCardTitle>Deliverables</PageCardTitle>
                   <CardDescription>Key requirements and features</CardDescription>
                 </CardHeader>
-                <CardContent className="h-[calc(100%-5rem)] overflow-y-auto pt-6">
-                  <div className="space-y-4">
+                <CardContent className="overflow-y-auto h-[calc(100%-5rem)]">
+                  <div className="space-y-4 pt-6">
                     <h3 className="text-base font-medium">Required Features</h3>
                     <ul className="text-sm text-muted-foreground space-y-2">
                       {brief.deliverables && brief.deliverables.length > 0 ? (
@@ -229,13 +229,13 @@ export default function BriefPage() {
               </Card>
 
               {/* Brief Details */}
-              <Card className="flex-1 overflow-hidden min-h-0">
+              <Card className="h-full overflow-hidden">
                 <CardHeader className="flex-none border-b">
                   <PageCardTitle>Brief Details</PageCardTitle>
                   <CardDescription>Company and design specifications</CardDescription>
                 </CardHeader>
-                <CardContent className="h-[calc(100%-5rem)] overflow-y-auto pt-6">
-                  <div className="space-y-6">
+                <CardContent className="overflow-y-auto h-[calc(100%-5rem)]">
+                  <div className="space-y-6 pt-6">
                     <div>
                       <dl className="grid grid-cols-1 gap-4 text-sm">
                         <div>
@@ -270,7 +270,6 @@ export default function BriefPage() {
                         </div>
                       </dl>
                     </div>
-                    
                   </div>
                 </CardContent>
               </Card>

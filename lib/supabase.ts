@@ -17,6 +17,7 @@ export type Brief = {
   created_at: string;
   brand_colors?: string[];
   style?: string;
+  deliverables?: string[];
 };
 
 // Create a single supabase client for interacting with your database

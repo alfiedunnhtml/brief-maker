@@ -41,7 +41,7 @@ export default function BriefsPage() {
   return (
     <MainLayout>
       <div className="max-w-[1250px] mx-auto py-8 space-y-6">
-        <div>
+        <div className="text-center">
           <h1 className="text-3xl font-bold">All Briefs</h1>
           <p className="text-muted-foreground">
             Browse through all generated briefs

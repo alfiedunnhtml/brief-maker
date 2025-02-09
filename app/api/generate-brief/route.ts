@@ -120,7 +120,7 @@ Important information:
   - Glassmorphism
   - Elegant
   - Playful
-(YOU SHOULD NOT ONLY CHOSE FROM THIS LIST, YOU CAN CHOSE FROM ANY STYLE BUT THE STYLE MUST FIT WITH THE BUSINESS
+(YOU MUST PICK A WEBSITE STYLE, YOU SHOULD NOT CHOSE ONLY FROM THIS LIST, YOU CAN CHOSE FROM ANY STYLE BUT THE STYLE MUST FIT WITH THE BUSINESS
 FOR EXAMPLE: A LAW FIRM SHOULD NOT HAVE A PLAYFUL WEBSITE STYLE, THEY SHOULD HAVE A MORE PROFESSIONAL & CORPORATE STYLE,
 A PLAYFUL WEBSITE STYLE IS MORE SUITABLE FOR A TOY STORE OR A CAKE SHOP)
 
@@ -138,8 +138,7 @@ At the end of the brief, add these lines:
 INDUSTRY: [industry name, maximum 19 characters]
 DIFFICULTY: [Easy/Medium/Hard]
 COMPANY NAME: [company name]
-
-If you have mentioned them in the response, add:
+DELIVERABLES: [all deliverables mentioned in the response, specific things you have asked the developer to build / features you have asked for]
 COLORS: [all colors mentioned in the response (PROVIDE HEX CODES)]
 WEBSITE STYLE: [all website styles mentioned in the response]`
         },

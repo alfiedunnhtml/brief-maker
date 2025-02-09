@@ -140,15 +140,18 @@ export default function BriefPage() {
                 </CardHeader>
                 <CardContent className="h-[calc(100%-5rem)] overflow-y-auto pt-6">
                   <div className="space-y-4">
-                    <h3 className="text-base font-medium">Required Pages</h3>
+                    <h3 className="text-base font-medium">Required Features</h3>
                     <ul className="text-sm text-muted-foreground space-y-2">
-                      <li>• Filler Text </li>
-                      <li>• Filler Text </li>
-                      <li>• Filler Text </li>
-                      <li>• Filler Text </li>
-                      <li>• Filler Text </li>
-                      <li>• Filler Text </li>
-                      <li>• Filler Text </li>
+                      {brief.deliverables && brief.deliverables.length > 0 ? (
+                        brief.deliverables.map((deliverable, index) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <span className="text-yellow-500">•</span>
+                            <span>{deliverable}</span>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="text-muted-foreground">No specific features required</li>
+                      )}
                     </ul>
                   </div>
                 </CardContent>

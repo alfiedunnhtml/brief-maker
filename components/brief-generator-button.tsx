@@ -36,13 +36,28 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
         throw new Error(data.error);
       }
 
-      // Parse the response to extract industry, difficulty, and company name
+      // Parse the response to extract metadata
       const lines: string[] = data.content.split("\n");
       const industryLine = lines.find((line: string) => line.startsWith("INDUSTRY:"));
       const difficultyLine = lines.find((line: string) => line.startsWith("DIFFICULTY:"));
       const companyLine = lines.find((line: string) => line.startsWith("COMPANY NAME:"));
       const colorsLine = lines.find((line: string) => line.startsWith("COLORS:"));
       const styleLine = lines.find((line: string) => line.startsWith("WEBSITE STYLE:"));
+
+      // Extract deliverables section
+      const deliverablesStartIndex = lines.findIndex(line => line.startsWith("DELIVERABLES:"));
+      let deliverables: string[] = [];
+      
+      if (deliverablesStartIndex !== -1) {
+        // Get the line after "DELIVERABLES:" and split by commas
+        const deliverablesLine = lines[deliverablesStartIndex].split("DELIVERABLES:")[1];
+        if (deliverablesLine) {
+          deliverables = deliverablesLine
+            .split(",")
+            .map(item => item.trim())
+            .filter(Boolean); // Remove empty strings
+        }
+      }
 
       const industry = industryLine ? industryLine.split(":")[1].trim() : "Unknown";
       const difficulty = difficultyLine ? difficultyLine.split(":")[1].trim() : "Medium";
@@ -54,14 +69,15 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
         : [];
       const style = styleLine ? styleLine.split(":")[1].trim() : "";
 
-      // Remove the metadata lines from the content
+      // Remove the metadata lines and deliverables section from the content
       const content = lines
         .filter((line: string) => 
           !line.startsWith("INDUSTRY:") && 
           !line.startsWith("DIFFICULTY:") && 
           !line.startsWith("COMPANY NAME:") &&
           !line.startsWith("COLORS:") &&
-          !line.startsWith("WEBSITE STYLE:")
+          !line.startsWith("WEBSITE STYLE:") &&
+          !line.startsWith("DELIVERABLES:")
         )
         .join("\n")
         .trim();
@@ -75,6 +91,7 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
         created_at: new Date().toISOString(),
         brand_colors,
         style,
+        deliverables,
       };
 
       onBriefGenerated(newBrief);

@@ -49,6 +49,7 @@ export default function Home() {
             created_at: brief.created_at,
             brand_colors: brief.brand_colors,
             style: brief.style,
+            deliverables: brief.deliverables,
           },
         ])
         .select()

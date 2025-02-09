@@ -13,14 +13,23 @@
  * 4. Show a blur overlay on the third row (via blurOverlay prop)
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase, type Brief } from "@/lib/supabase";
 import { Spinner } from "@/components/ui/spinner";
 import { BriefCard } from "./brief-card";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpDown, Filter } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+
 
 interface BriefListProps {
   briefs?: Brief[];                                    // Pre-fetched briefs (optional)
@@ -30,21 +39,69 @@ interface BriefListProps {
   onDelete?: (id: number) => void;                    // Callback when a brief is deleted
 }
 
+// Difficulty order for sorting
+const difficultyOrder = {
+  "Easy": 1,
+  "Medium": 2,
+  "Hard": 3
+};
+
 export function BriefList({ briefs: initialBriefs, setBriefs, blurOverlay, limit, onDelete }: BriefListProps) {
   // Component state management
   const [localBriefs, setLocalBriefs] = useState<Brief[]>([]); // Stores briefs locally
   const [isLoading, setIsLoading] = useState(true);            // Loading state
   const [error, setError] = useState<string | null>(null);     // Error handling
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc'); // Sort order state
+  const [selectedDifficulties, setSelectedDifficulties] = useState<Record<string, boolean>>({
+    "Easy": true,
+    "Medium": true,
+    "Hard": true
+  });
+  const [isMediumScreen, setIsMediumScreen] = useState(false);
 
-  // Function to fetch random briefs
-  const fetchRandomBrief = async () => {
+  // Function to sort briefs by difficulty - Memoize the function
+  const sortBriefsByDifficulty = useCallback((briefs: Brief[], order: 'asc' | 'desc') => {
+    return [...briefs].sort((a, b) => {
+      const orderA = difficultyOrder[a.difficulty as keyof typeof difficultyOrder] || 0;
+      const orderB = difficultyOrder[b.difficulty as keyof typeof difficultyOrder] || 0;
+      return order === 'asc' ? orderA - orderB : orderB - orderA;
+    });
+  }, []);
+
+  // Toggle sort order
+  const toggleSort = useCallback(() => {
+    const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newOrder);
+    setLocalBriefs(prev => sortBriefsByDifficulty(prev, newOrder));
+  }, [sortOrder, sortBriefsByDifficulty]);
+
+  // Function to handle difficulty filter changes
+  const handleDifficultyFilter = useCallback((difficulty: string) => {
+    setSelectedDifficulties(prev => {
+      const newSelection = { ...prev, [difficulty]: !prev[difficulty] };
+      
+      // Filter briefs based on new selection
+      const filteredBriefs = initialBriefs || [];
+      const filtered = filteredBriefs.filter(brief => 
+        newSelection[brief.difficulty as keyof typeof difficultyOrder]
+      );
+      
+      // Apply current sort order to filtered briefs
+      const sorted = sortBriefsByDifficulty(filtered, sortOrder);
+      setLocalBriefs(sorted);
+      
+      return newSelection;
+    });
+  }, [initialBriefs, sortBriefsByDifficulty, sortOrder]);
+
+  // Function to fetch random briefs - Memoize the function
+  const fetchRandomBrief = useCallback(async () => {
     try {
       const { count } = await supabase
         .from('briefs')
         .select('*', { count: 'exact', head: true });
         
       if (count) {
-        // Get one random brief
         const offset = Math.floor(Math.random() * count);
         const { data, error } = await supabase
           .from('briefs')
@@ -60,12 +117,11 @@ export function BriefList({ briefs: initialBriefs, setBriefs, blurOverlay, limit
       console.error('Error fetching random brief:', error);
     }
     return null;
-  };
+  }, []);
 
-  // Handle brief deletion
-  const handleBriefDeleted = async (id: number) => {
+  // Handle brief deletion - Memoize the function
+  const handleBriefDeleted = useCallback(async (id: number) => {
     try {
-      // Delete the brief from the database
       const { error } = await supabase
         .from('briefs')
         .delete()
@@ -73,12 +129,8 @@ export function BriefList({ briefs: initialBriefs, setBriefs, blurOverlay, limit
 
       if (error) throw error;
 
-      // Call the parent's onDelete handler if provided
-      if (onDelete) {
-        onDelete(id);
-      }
+      onDelete?.(id);
 
-      // If we're showing limited briefs (homepage), replace the deleted brief
       if (limit) {
         const newBrief = await fetchRandomBrief();
         if (newBrief) {
@@ -86,84 +138,91 @@ export function BriefList({ briefs: initialBriefs, setBriefs, blurOverlay, limit
             prev.map(brief => brief.id === id ? newBrief : brief)
           );
         } else {
-          // If we couldn't get a new brief, just remove the deleted one
           setLocalBriefs(prev => prev.filter(brief => brief.id !== id));
         }
       } else {
-        // For the full list page, just remove the brief
         setLocalBriefs(prev => prev.filter(brief => brief.id !== id));
       }
     } catch (error) {
       console.error('Error deleting brief:', error);
     }
-  };
+  }, [limit, onDelete, fetchRandomBrief]);
 
   // Effect hook to handle brief fetching
   useEffect(() => {
-    // Define the async function to fetch briefs
-    async function fetchBriefs() {
-      try {
-        // Initialize the base query
-        let query = supabase
-          .from('briefs')
-          .select('*');
+    let mounted = true;
 
-        // Handle random brief selection when limit is provided (e.g., homepage)
+    async function fetchBriefs() {
+      if (!mounted) return;
+      
+      try {
+        setIsLoading(true);
+        let query = supabase.from('briefs').select('*');
+
         if (limit) {
-          // First, get the total count of briefs in the database
           const { count } = await supabase
             .from('briefs')
             .select('*', { count: 'exact', head: true });
             
-          if (count) {
-            // Calculate a random starting point to get random briefs
-            // Ensures we don't try to fetch past the end of the available briefs
+          if (count && mounted) {
             const offset = Math.max(0, Math.floor(Math.random() * (count - limit)));
-            // Modify query to fetch 'limit' number of briefs from the random offset
             query = query.range(offset, offset + limit - 1);
           }
-        }
-
-        // For the full briefs page (no limit), order by newest first
-        if (!limit) {
+        } else {
           query = query.order('created_at', { ascending: false });
         }
 
-        // Execute the query
         const { data, error } = await query;
 
-        // Handle any database errors
+        if (!mounted) return;
+
         if (error) {
-          console.error('Supabase error:', error);
           setError(error.message);
           return;
         }
 
-        // Update both local and parent state with the fetched briefs
         const briefsData = data || [];
         setLocalBriefs(briefsData);
-        if (setBriefs) {
-          setBriefs(briefsData);
-        }
+        setBriefs?.(briefsData);
       } catch (error) {
-        // Handle any unexpected errors
-        console.error('Error:', error);
-        setError(error instanceof Error ? error.message : 'Failed to fetch briefs');
+        if (mounted) {
+          setError(error instanceof Error ? error.message : 'Failed to fetch briefs');
+        }
       } finally {
-        // Always mark loading as complete
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     }
 
-    // If briefs were provided via props, use those instead of fetching
     if (initialBriefs && initialBriefs.length > 0) {
       setLocalBriefs(initialBriefs);
       setIsLoading(false);
     } else {
-      // Otherwise, fetch briefs from the database
       fetchBriefs();
     }
-  }, [initialBriefs, setBriefs, limit]); // Re-run if these dependencies change
+
+    return () => {
+      mounted = false;
+    };
+  }, [initialBriefs, setBriefs, limit]);
+
+  // Add this useEffect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      const isTablet = window.matchMedia('(min-width: 768px) and (max-width: 1023px)').matches;
+      setIsMediumScreen(isTablet);
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Show loading spinner while fetching
   if (isLoading) {
@@ -197,18 +256,60 @@ export function BriefList({ briefs: initialBriefs, setBriefs, blurOverlay, limit
   // Render the grid of briefs
   return (
     <div>
+      {/* Show sort button when displaying all briefs (no limit) */}
+      {!limit && !isLoading && localBriefs.length > 0 && (
+        <div className="flex justify-end items-center gap-2 mb-6">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <Filter className="h-4 w-4" />
+                Filter Difficulty
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>Difficulty Levels</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {Object.keys(difficultyOrder).map((difficulty) => (
+                <DropdownMenuCheckboxItem
+                  key={difficulty}
+                  checked={selectedDifficulties[difficulty]}
+                  onCheckedChange={() => handleDifficultyFilter(difficulty)}
+                  className={cn(
+                    difficulty === "Easy" && "text-green-800",
+                    difficulty === "Medium" && "text-yellow-800",
+                    difficulty === "Hard" && "text-red-800"
+                  )}
+                >
+                  {difficulty}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          <Button
+            variant="outline"
+            onClick={toggleSort}
+            className="gap-2 transition duration-300 ease-in-out hover:bg-black hover:text-white"
+          >
+            <ArrowUpDown className="h-4 w-4" />
+            Sort by Difficulty ({sortOrder === 'asc' ? 'Easy to Hard' : 'Hard to Easy'})
+          </Button>
+        </div>
+      )}
       <section className={cn(
         "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
         "relative isolate" // Added isolate to create a new stacking context
       )}>
-        {/* Map through briefs and render each one */}
-        {localBriefs.map((brief) => (
-          <BriefCard 
-            key={brief.id} 
-            brief={brief} 
-            onDelete={handleBriefDeleted}
-          />
-        ))}
+        {/* If medium screen & there is a limit, show 3 less briefs */}
+        {localBriefs
+          .slice(0, isMediumScreen && limit ? limit - 3 : undefined)
+          .map((brief) => (
+            <BriefCard 
+              key={brief.id} 
+              brief={brief} 
+              onDelete={handleBriefDeleted}
+            />
+          ))}
         {/* Enhanced blur overlay with multiple layers */}
         {blurOverlay && (
           <>
@@ -230,7 +331,12 @@ export function BriefList({ briefs: initialBriefs, setBriefs, blurOverlay, limit
               }}
             />
             {/* View All button */}
-            <div className="absolute left-1/2 z-30 -translate-x-1/2" style={{ top: 'calc(75% + 60px)' }}>
+            <div 
+              className="absolute left-1/2 z-30 -translate-x-1/2" 
+              style={{ 
+                top: 'calc(75% + 60px)'
+              }}
+            >
               <Link href="/briefs">
                 <Button className="transition duration-300 ease-in-out bg-white border border-gray-300 hover:bg-black hover:text-white text-black gap-2 rounded-full shadow-none">
                   View All Briefs

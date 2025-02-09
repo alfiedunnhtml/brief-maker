@@ -120,21 +120,12 @@ export function Navbar() {
                   )}
                   <Link href="/account">
                     <Button 
-                      variant="ghost" 
-                      className="gap-2"
-                    >
+                      variant="secondary" 
+                      className="gap-2">
                       <UserIcon className="h-4 w-4" />
-                      Account
                     </Button>
                   </Link>
-                  <Button 
-                    variant="ghost" 
-                    className="gap-2 text-red-500 hover:text-red-600 hover:bg-red-100"
-                    onClick={() => setShowSignOutDialog(true)}
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </Button>
+
                 </>
               ) : (
                 <>

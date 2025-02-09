@@ -113,22 +113,25 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className="max-w-[1250px] mx-auto space-y-16">
-        {/* Top Section */}
-        <div className="grid grid-cols-[400px,1fr] gap-8">
-          <div>
+      <div className="flex flex-col items-center max-w-[1250px] mx-auto space-y-16 py-8 ">
+        {/* Main container with responsive grid */}
+
+
+
+        <div className="grid grid-cols-1 max-w-[700px] lg:grid-cols-[400px,1fr] gap-4 lg:gap-8 lg:max-w-none">
+          <div className="w-full">
             <BriefGeneratorSection onBriefGenerated={handleBriefGenerated} />
           </div>
           {/* Generated brief section */}
           {latestBrief ? (
             <Link href={`/brief/${latestBrief.id}`}>
-              <div className="min-h-72 rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
-                <div className="grid grid-cols-[1fr,300px] gap-6">
+              <div className="min-h-fit lg:min-h-72 rounded-lg border bg-card p-4 lg:p-6 transition-all hover:shadow-lg">
+                <div className="grid grid-cols-1 xl:grid-cols-[1fr,300px] gap-6">
                   {/* Brief Content */}
-                  <div>
-                    <h2 className="text-lg font-semibold mb-4">Generated Brief</h2>
+                  <div className="space-y-4">
+                    <h2 className="text-lg font-semibold">Generated Brief</h2>
                     <div>
-                      <div className="flex gap-2 mb-3">
+                      <div className="flex flex-wrap gap-2 mb-3">
                         <span className="rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
                           {latestBrief.industry}
                         </span>
@@ -149,14 +152,14 @@ export default function Home() {
                       <h3 className="text-xl font-semibold mb-2">
                         {latestBrief.company_name || "Web Design Brief"}
                       </h3>
-                      <div className="space-y-2">
+                      <div className="space-y-2 prose prose-sm max-w-none">
                         {formatContent(latestBrief.content)}
                       </div>
                     </div>
                   </div>
 
                   {/* Brief Details */}
-                  <div className="border-l pl-6">
+                  <div className="border-t xl:border-t-0 xl:border-l pt-4 xl:pt-0 xl:pl-6">
                     <h3 className="text-lg font-semibold mb-4">Brief Details</h3>
                     <dl className="space-y-4 text-sm">
                       <div>
@@ -173,12 +176,12 @@ export default function Home() {
                       </div>
                       <div>
                         <dt className="text-base font-medium mb-2">Brand Colors</dt>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                           {latestBrief.brand_colors && latestBrief.brand_colors.length > 0 ? (
                             latestBrief.brand_colors.map((color, index) => (
                               <div 
                                 key={index}
-                                className="border-2 border-gray-100 h-12 w-12 rounded"
+                                className="border-2 border-gray-100 h-10 w-10 sm:h-12 sm:w-12 rounded"
                                 style={{ backgroundColor: color }}
                               />
                             ))
@@ -193,10 +196,13 @@ export default function Home() {
               </div>
             </Link>
           ) : (
-            // placeholder for the brief
-            <div className="h-72 rounded-lg border bg-card p-6 flex items-center justify-center">
-              <h2 className="text-muted-foreground text-2xl font-semibold mb-4">Generate a brief to get started...</h2>
+            // placeholder for the brief with responsive height
+            <div className="h-48 lg:h-72 rounded-lg border bg-card p-4 lg:p-6 flex items-center justify-center">
+              <h2 className="text-muted-foreground text-xl lg:text-2xl font-medium text-center px-4">
+                Generate a brief to get started...
+              </h2>
             </div>
+
           )}
         </div>
 

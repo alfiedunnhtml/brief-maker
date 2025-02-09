@@ -1,18 +1,24 @@
-import { Navbar } from "./navbar";
+"use client"
+
+import { Navbar } from "@/components/navbar"
+
 
 interface MainLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-[#FCFCFC]">
+    <div className="relative min-h-screen">
+
+      
+      {/* Main Content */}
       <Navbar />
-      <main className="pt-16">
-        <div className="mx-auto px-4 py-8">
+      <main className="relative z-10 pt-24 px-4 py-8 md:px-8 lg:px-12">
+        <div className="flex flex-col items-center bg-[linear-gradient(to_right,transparent_0%,white_20%,white_80%,transparent_100%)]">
           {children}
         </div>
       </main>
     </div>
-  );
+  )
 } 

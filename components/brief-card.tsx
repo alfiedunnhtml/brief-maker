@@ -90,7 +90,7 @@ export function BriefCard({ brief, initialLiked, onDelete }: BriefCardProps) {
   return (
     <>
       <Link href={`/brief/${brief.id}`} className="block h-full">
-        <Card className="relative flex h-full flex-col p-6">
+        <Card className="border-2 border-gray-100 shadow-none relative flex h-full flex-col p-6">
           <div className="flex-1">
             {/* Admin Controls */}
             {isAdmin && (

@@ -82,7 +82,7 @@ export default function BriefPage() {
     <MainLayout>
       <div className="space-y-16 max-w-[1250px] mx-auto">
         {/* Dashboard */}
-        <div className="h-[calc(75vh)]">
+        <div className="">
           <div className="grid h-full grid-cols-1 lg:grid-cols-[2fr,1fr,1fr] gap-6">
             {/* Left Column */}
             <div className="flex flex-col gap-6 min-w-0">

@@ -1,4 +1,21 @@
+/**
+ * Home Page
+ * 
+ * The main landing page of the application. It features:
+ * 1. A brief generator section where users can create new briefs
+ * 2. A preview section showing the latest generated brief
+ * 3. A grid of previously generated briefs
+ * 
+ * The page handles:
+ * - Brief generation and storage
+ * - Real-time updates of the brief list
+ * - Brief deletion
+ * - Navigation to individual brief pages
+ */
+
 "use client";
+
+
 
 import { useState, useEffect } from "react";
 import { BriefList } from "@/components/brief-list";
@@ -8,14 +25,20 @@ import { supabase, type Brief } from "@/lib/supabase";
 import { BriefCard } from "@/components/brief-card";
 import Link from "next/link";
 
+
+
+
 export default function Home() {
+  // State for all briefs and the most recently generated brief
   const [briefs, setBriefs] = useState<Brief[]>([]);
   const [latestBrief, setLatestBrief] = useState<Brief | null>(null);
 
+  // Fetch briefs on component mount
   useEffect(() => {
     fetchBriefs();
   }, []);
 
+  // Fetch all briefs from the database
   async function fetchBriefs() {
     try {
       const { data, error } = await supabase
@@ -34,6 +57,7 @@ export default function Home() {
     }
   }
 
+  // Handle the generation of a new brief
   const handleBriefGenerated = async (brief: Brief) => {
     try {
       // console.log('Saving brief:', brief);
@@ -68,6 +92,7 @@ export default function Home() {
     }
   };
 
+  // Handle the deletion of a brief
   const handleBriefDeleted = (id: number) => {
     setBriefs((prev) => prev.filter(brief => brief.id !== id));
     if (latestBrief?.id === id) {
@@ -75,6 +100,9 @@ export default function Home() {
     }
   };
 
+
+
+  // Format the brief content into paragraphs
   function formatContent(content: string) {
     return content.split('\n').map((paragraph, index) => (
       <p key={index} className="text-sm text-muted-foreground mb-2">
@@ -180,15 +208,11 @@ export default function Home() {
               <p className="text-muted-foreground">Browse through previously generated briefs</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {briefs.map((brief) => (
-              <BriefCard 
-                key={brief.id} 
-                brief={brief} 
-                onDelete={handleBriefDeleted}
-              />
-            ))}
-          </div>
+          <BriefList 
+            limit={9} 
+            blurOverlay 
+            onDelete={handleBriefDeleted}
+          />
         </div>
       </div>
     </MainLayout>

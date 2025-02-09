@@ -1,3 +1,19 @@
+/**
+ * Brief Detail Page
+ * 
+ * Displays a detailed view of a single brief. The page is divided into three columns:
+ * 1. Left Column: Main brief content and company overview
+ * 2. Middle Column: Deliverables and brief details (colors, style, etc.)
+ * 3. Right Column: Comments section
+ * 
+ * Features:
+ * - Real-time comment system
+ * - Like button integration
+ * - Responsive layout
+ * - Loading and error states
+ * - Authentication-gated commenting
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,7 +29,9 @@ import { BriefList } from "@/components/brief-list";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-// Add this wrapper component at the top of your BriefPage component
+
+
+// Title component for consistent styling across cards
 const PageCardTitle = ({ children, className, ...props }: React.ComponentPropsWithoutRef<typeof CardTitle>) => (
   <CardTitle 
     className={cn(
@@ -26,7 +44,7 @@ const PageCardTitle = ({ children, className, ...props }: React.ComponentPropsWi
   </CardTitle>
 );
 
-// Simplify the Comment interface
+// Comment interface for type safety
 interface Comment {
   id: number;
   content: string;
@@ -35,6 +53,7 @@ interface Comment {
 }
 
 export default function BriefPage() {
+  // State management for brief data and UI
   const params = useParams();
   const [brief, setBrief] = useState<Brief | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +64,26 @@ export default function BriefPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
+  // Handle brief deletion
+  const handleBriefDeleted = async (id: number) => {
+    try {
+      const { error } = await supabase
+        .from('briefs')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      // If the deleted brief is the current one, navigate back
+      if (id === parseInt(params.id as string)) {
+        router.push('/briefs');
+      }
+    } catch (error) {
+      console.error('Error deleting brief:', error);
+    }
+  };
+
+  // Fetch brief data on component mount
   useEffect(() => {
     async function fetchBrief() {
       try {
@@ -332,7 +371,11 @@ export default function BriefPage() {
         {/* Brief List */}
         <div className="mt-12 pb-8">
           <h2 className="text-center text-2xl font-semibold tracking-tight mb-6">More Briefs</h2>
-          <BriefList />
+          <BriefList 
+            limit={9} 
+            blurOverlay 
+            onDelete={handleBriefDeleted}
+          />
         </div>
       </div>
     </MainLayout>

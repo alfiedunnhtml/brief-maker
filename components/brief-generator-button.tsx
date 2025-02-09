@@ -1,17 +1,35 @@
 "use client";
 
+/**
+ * BriefGeneratorButton Component
+ * 
+ * A button component that generates new briefs using the OpenAI API.
+ * It handles the entire generation process including:
+ * - Making the API request
+ * - Parsing the response
+ * - Extracting metadata (industry, difficulty, colors, etc.)
+ * - Creating a structured Brief object
+ * 
+ * Features:
+ * - Loading state with spinner
+ * - Error handling and display
+ * - Parses complex AI response into structured data
+ * - Callback with generated brief data
+ */
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { type Brief } from "@/lib/supabase";
+import { Sparkles } from "lucide-react";
 
 interface ApiResponse {
-  content: string;
-  error?: string;
+  content: string;    // Raw response from the OpenAI API
+  error?: string;     // Optional error message
 }
 
 interface BriefGeneratorButtonProps {
-  onBriefGenerated: (brief: Brief) => void;
+  onBriefGenerated: (brief: Brief) => void;  // Callback when brief is generated
 }
 
 export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonProps) {
@@ -105,19 +123,24 @@ export function BriefGeneratorButton({ onBriefGenerated }: BriefGeneratorButtonP
 
   return (
     <div className="flex flex-col items-start gap-4">
+      
       <Button
         size="lg"
-        className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+        className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold"
         onClick={generateBrief}
         disabled={isLoading}
       >
+
         {isLoading ? (
           <>
             <Spinner className="mr-2" />
             Generating...
           </>
         ) : (
-          "Generate Brief"
+          <>
+            <Sparkles className="h-4 w-4 mr-2" />
+            Generate Brief
+          </>
         )}
       </Button>
       {error && (

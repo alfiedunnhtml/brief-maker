@@ -1,7 +1,23 @@
+/**
+ * Generate Brief API Route
+ * 
+ * This API endpoint generates a new brief using OpenAI's GPT model.
+ * It handles:
+ * 1. Random selection of industry and difficulty
+ * 2. Structured prompt generation
+ * 3. OpenAI API interaction
+ * 4. Response parsing and error handling
+ * 
+ * The response includes a structured brief with:
+ * - Company name and industry
+ * - Difficulty level
+ * - Design requirements
+ * - Brand colors
+ * - Deliverables
+ */
+
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
-
-
 
 const industries = [
   "1. Food & Beverage",
@@ -62,7 +78,6 @@ const briefDifficulty = {
     "medium deliverables": 0,
     "hard deliverables": 0,
     "brief length estimate": "1000 characters"
-
   },
   "Medium": {
     "total deliverables": 7,
@@ -71,19 +86,14 @@ const briefDifficulty = {
     "hard deliverables": 0,
     "brief length estimate": "1200 characters"
   },
-
-
   "Hard": {
     "total deliverables": 9,
     "easy deliverables": 2,
     "medium deliverables": 3,
     "hard deliverables": 4,
     "brief length estimate": "1400 characters"
-
-
   }
 }
-
 
 // Initialize OpenAI client (server-side only)
 const openai = new OpenAI({
@@ -101,14 +111,11 @@ export async function POST() {
   try {
     const randomNumber = Math.floor(Math.random() * 13) + 1;
     const randomNumber2 = Math.floor(Math.random() * 49) + 1;
-    // gives slightly more weight to the medium difficulty
     const difficulty = randomNumber <= 4 ? "Easy" : randomNumber <= 9 ? "Medium" : "Hard";
     
-    // Get the selected industry (subtract 1 since array is 0-indexed)
     const selectedIndustry = industries[randomNumber2 - 1].split(". ")[1];
     console.log(`difficulty: ${randomNumber}, ${difficulty} ---  Industry: ${randomNumber2}, ${selectedIndustry}`);
 
-    // Get the corresponding difficulty settings
     const difficultySettings = briefDifficulty[difficulty];
     console.log('Difficulty Settings:', difficultySettings);
 
@@ -118,8 +125,6 @@ export async function POST() {
         {
           role: "system",
           content: `You are a business owner who needs a website. Generate professional website briefs that web developers can use for practice. Keep responses concise and business-focused.
-
-
 
 Key brief guidelines:
 **You MUST follow these guidelines strictly**
@@ -140,8 +145,6 @@ Key brief guidelines:
 - You MUST include hex codes for colors you have referenced at the end of the response. When referencing colors in the brief, just use the color name, never use hex codes.
 - You MUST aim for 3 paragraphs of content, around 1200 characters is a good length but this is not a strict requirement.
 - The brief section of the response should end naturally, dont end it with a list of requirements or by explaining the requirements.
-
-
 
 Important information:
 
@@ -189,15 +192,12 @@ The difficulty of your brief & what you are asking for *MUST* match the difficul
   - Playful
 (YOU SHOULD NOT CHOSE ONLY FROM THIS LIST, YOU CAN CHOSE FROM ANY STYLE BUT THE STYLE MUST FIT WITH THE BUSINESS)
 
-
 ### BUSINESS NAME
 
 - Try to come up with unique business names, Instead of using predictable words like 'eco' or 'harvest', try creating a name that combines abstract concepts or unexpected word pairings relevant to the industry. Provide unique, imaginative business name that avoids common industry buzzwords and generic terms.
 - Avoid often repeated words like [Eco, Urban, Harvest, Aqua]
 - Business names can often be puns, use play on words, use wordplay, use new invented words & are most of the time short (less than 3 words)
 - Try to come up with unique brand colors, you often use colors like "#4CAF50", "#8B4513" it is not forbidden to use them but try to come up with unique colors, however the colors should work well together and must fit with the business.
-
-
 
 ### FORMATTING
 
@@ -210,7 +210,6 @@ COLORS: [all colors mentioned in the response (PROVIDE HEX CODES)]
 WEBSITE STYLE: [all website styles mentioned in the response]
 
 `
-
         },
         {
           role: "user",
@@ -233,7 +232,6 @@ WEBSITE STYLE: [all website styles mentioned in the response]
   } catch (error) {
     console.error("Error generating brief:", error);
     
-    // Handle specific OpenAI API errors
     if (error instanceof OpenAI.APIError) {
       const status = error.status || 500;
       return NextResponse.json(

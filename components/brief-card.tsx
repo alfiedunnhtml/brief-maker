@@ -1,3 +1,20 @@
+/**
+ * BriefCard Component
+ * 
+ * A reusable card component that displays a brief's details in a structured format.
+ * It includes admin controls, tags for industry and difficulty, and interactive elements
+ * like comments count and like button.
+ * 
+ * Features:
+ * - Admin controls for editing and deleting briefs (only visible to admin users)
+ * - Industry and difficulty tags with color coding
+ * - Truncated content preview
+ * - Comment count display
+ * - Like button integration
+ * - Delete confirmation dialog
+ * - Links to the full brief view
+ */
+
 import { Card } from "@/components/ui/card";
 import { LikeButton } from "@/components/ui/like-button";
 import { type Brief } from "@/lib/supabase";
@@ -18,11 +35,12 @@ import {
 } from "@/components/ui/dialog";
 
 interface BriefCardProps {
-  brief: Brief;
-  initialLiked?: boolean;
-  onDelete?: (id: number) => void;
+  brief: Brief;                              // The brief data to display
+  initialLiked?: boolean;                    // Whether the brief is initially liked by the user
+  onDelete?: (id: number) => void;           // Callback when brief is deleted
 }
 
+// Helper function to truncate long text with ellipsis
 function truncateText(text: string, maxLength: number = 200) {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength).trim() + '...';

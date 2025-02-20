@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-      <body>
+      <body className="bg-gray-50">
         <AdminProvider>
           {children}
         </AdminProvider>

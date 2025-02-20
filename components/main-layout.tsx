@@ -15,7 +15,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       {/* Main Content */}
       <Navbar />
       <main className="relative z-10 pt-24 px-4 py-8 md:px-8 lg:px-12">
-        <div className="flex flex-col items-center bg-[linear-gradient(to_right,transparent_0%,white_20%,white_80%,transparent_100%)]">
+        <div className="flex flex-col items-center ">
           {children}
         </div>
       </main>
